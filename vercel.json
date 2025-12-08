@@ -1,0 +1,151 @@
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  urlPattern: string;
+  options: { [key: string]: any };
+}
+
+interface FrameworkSettings {
+  vercel?: Record<string, any>;
+  netlify?: Record<string, any>;
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvVariables;
+  redirects: Array<{ from: string; to: string; status: number }>;
+  headers: Array<HeaderRule>;
+  cacheStrategies: Array<CacheStrategy>;
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    VERCEL_ENV: process.env.VERCEL_ENV
+  },
+  redirects: [
+    { from: "/old-url", to: "/new-url", status: 301 }
+  ],
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Access-Control-Allow-Origin", value: "*" },
+        { key: "strict-transport-security", value: "max-age=63072000; includeSubDomains; preload" }
+      ]
+    }
+  ],
+  cacheStrategies: [
+    {
+      urlPattern: "/api/(.*)",
+      options: { immutable: true, maxAgeSeconds: 1800 }
+    },
+    {
+      urlPattern: "/*",
+      options: { immutable: false, maxAgeSeconds: 604800 }
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      buildContext: "production",
+      functions: ".vercel/functions/"
+    }
+  }
+};
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  urlPattern: string;
+  options: { [key: string]: any };
+}
+
+interface FrameworkSettings {
+  vercel?: Record<string, any>;
+  netlify?: Record<string, any>;
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvVariables;
+  redirects: Array<{ from: string; to: string; status: number }>;
+  headers: Array<HeaderRule>;
+  cacheStrategies: Array<CacheStrategy>;
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    VERCEL_ENV: process.env.VERCEL_ENV
+  },
+  redirects: [
+    { from: "/old-url", to: "/new-url", status: 301 }
+  ],
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Access-Control-Allow-Origin", value: "*" },
+        { key: "strict-transport-security", value: "max-age=63072000; includeSubDomains; preload" }
+      ]
+    }
+  ],
+  cacheStrategies: [
+    {
+      urlPattern: "/api/(.*)",
+      options: { immutable: true, maxAgeSeconds: 1800 }
+    },
+    {
+      urlPattern: "/*",
+      options: { immutable: false, maxAgeSeconds: 604800 }
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      buildContext: "production",
+      functions: ".vercel/functions/"
+    }
+  }
+};
